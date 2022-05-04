@@ -53,7 +53,6 @@ jobs:
       - name: Publish
         run: |-
           docker push "gcr.io/$PROJECT_ID/test:$GITHUB_RUN_ATTEMPT"
-
       - name: Deploy
         run: |-
           gcloud compute instances update-container "$GCE_INSTANCE" \
