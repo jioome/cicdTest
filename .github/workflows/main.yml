@@ -7,6 +7,8 @@ on:
 
 env:
   PROJECT_ID: ${{ secrets.GCE_PROJECT }}
+  GCE_INSTANCE: instance-1
+  GCE_INSTANCE_ZONE: us-west4-b
 
 jobs:
   setup-build:
@@ -51,3 +53,9 @@ jobs:
       - name: Publish
         run: |-
           docker push "gcr.io/$PROJECT_ID/test:$GITHUB_RUN_ATTEMPT"
+
+      - name: Deploy
+        run: |-
+          gcloud compute instances update-container "$GCE_INSTANCE" \
+            --zone "$GCE_INSTANCE_ZONE" \ 
+            --container-image "gcr.io/$PROJECT_ID/test:$GITHUB_RUN_ATTEMPT"
